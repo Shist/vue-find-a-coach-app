@@ -5,11 +5,15 @@
     </h3>
     <h4>${{ rate }}/hour</h4>
     <div>
-      <span v-for="area in areas" :key="area">{{ area }}</span>
+      <BaseBadge v-for="area in areas" :key="area" :type="area" :title="area">
+        {{ area }}
+      </BaseBadge>
     </div>
     <div class="actions">
-      <router-link :to="coachContactLink">Contact</router-link>
-      <router-link :to="coachDetailsLink">View Details</router-link>
+      <BaseButton link :to="coachContactLink" mode="outline">
+        Contact
+      </BaseButton>
+      <BaseButton link :to="coachDetailsLink">View Details</BaseButton>
     </div>
   </li>
 </template>
@@ -18,24 +22,24 @@
 export default {
   props: {
     id: {
-      required: true,
       type: String,
+      required: true,
     },
     firstName: {
-      required: true,
       type: String,
+      required: true,
     },
     lastName: {
-      required: true,
       type: String,
+      required: true,
     },
     rate: {
-      required: true,
       type: Number,
+      required: true,
     },
     areas: {
-      required: true,
       type: Array,
+      required: true,
     },
   },
 
