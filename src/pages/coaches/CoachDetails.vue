@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="selectedCoach">
+    <div v-if="isLoading">
+      <BaseSpinner />
+    </div>
+    <div v-else-if="selectedCoach">
       <section>
         <BaseCard>
           <h2>{{ fullName }}</h2>
@@ -31,6 +34,9 @@
       </section>
     </div>
     <h2 v-else class="no-coach-headline">No coach with such ID found...</h2>
+    <BaseDialog :show="!!error" title="An error occurred!" @close="resetError">
+      <p>{{ error }}</p>
+    </BaseDialog>
   </div>
 </template>
 
@@ -45,6 +51,8 @@ export default {
 
   data() {
     return {
+      isLoading: false,
+      error: null,
       selectedCoach: null,
     };
   },
@@ -75,7 +83,31 @@ export default {
     },
   },
 
-  created() {
+  methods: {
+    async loadCoaches() {
+      this.isLoading = true;
+
+      try {
+        await this.$store.dispatch('coaches/loadCoaches', {
+          forceRefresh: false,
+        });
+      } catch (error) {
+        this.error = error.message || 'Something went wrong!';
+      }
+
+      this.isLoading = false;
+    },
+
+    resetError() {
+      this.error = null;
+    },
+  },
+
+  async created() {
+    if (!this.$store.getters['coaches/hasCoaches']) {
+      await this.loadCoaches();
+    }
+
     this.selectedCoach = this.$store.getters['coaches/coaches'].find(
       (coach) => coach.id === this.id
     );
