@@ -10,7 +10,9 @@
       <BaseCard>
         <header>
           <h2>Interested? Reach out now!</h2>
-          <BaseButton link :to="contactLink">Contact</BaseButton>
+          <BaseButton v-if="isContactBtnVisible" link :to="contactLink">
+            Contact
+          </BaseButton>
         </header>
         <router-view></router-view>
       </BaseCard>
@@ -63,7 +65,11 @@ export default {
     },
 
     contactLink() {
-      return `${this.$route.path}/${this.id}/contact`;
+      return `${this.$route.path}/contact`;
+    },
+
+    isContactBtnVisible() {
+      return !this.$route.path.endsWith('/contact');
     },
   },
 
