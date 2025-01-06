@@ -17,11 +17,10 @@ export default {
       }
     );
 
-    // Don't need it for now...
-    // const responseData = await response.json();
+    const responseData = await response.json();
 
     if (!response.ok) {
-      // error...
+      throw new Error(responseData.message || 'Failed to register!');
     }
 
     context.commit('registerCoach', { ...coachData, id: userId });

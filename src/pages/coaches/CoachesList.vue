@@ -25,7 +25,7 @@
       <h3 v-else>No coaches found.</h3>
     </BaseCard>
   </section>
-  <BaseDialog :show="!!error" title="An error occurred!" @close="handleError">
+  <BaseDialog :show="!!error" title="An error occurred!" @close="resetError">
     <p>{{ error }}</p>
   </BaseDialog>
 </template>
@@ -89,7 +89,7 @@ export default {
       this.isLoading = false;
     },
 
-    handleError() {
+    resetError() {
       this.error = null;
     },
   },
