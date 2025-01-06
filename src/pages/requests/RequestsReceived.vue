@@ -1,26 +1,28 @@
 <template>
-  <section>
-    <BaseCard>
-      <header>
-        <h2>Request Received</h2>
-      </header>
-      <div v-if="isLoading">
-        <BaseSpinner />
-      </div>
-      <ul v-else-if="hasRequests && !isLoading">
-        <RequestItem
-          v-for="req in receivedRequests"
-          :key="req.id"
-          :email="req.userEmail"
-          :message="req.message"
-        />
-      </ul>
-      <h3 v-else>You haven't received any requests yet!</h3>
-    </BaseCard>
-  </section>
-  <BaseDialog :show="!!error" title="An error occurred!" @close="resetError">
-    <p>{{ error }}</p>
-  </BaseDialog>
+  <div>
+    <section>
+      <BaseCard>
+        <header>
+          <h2>Request Received</h2>
+        </header>
+        <div v-if="isLoading">
+          <BaseSpinner />
+        </div>
+        <ul v-else-if="hasRequests && !isLoading">
+          <RequestItem
+            v-for="req in receivedRequests"
+            :key="req.id"
+            :email="req.userEmail"
+            :message="req.message"
+          />
+        </ul>
+        <h3 v-else>You haven't received any requests yet!</h3>
+      </BaseCard>
+    </section>
+    <BaseDialog :show="!!error" title="An error occurred!" @close="resetError">
+      <p>{{ error }}</p>
+    </BaseDialog>
+  </div>
 </template>
 
 <script>

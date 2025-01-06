@@ -1,16 +1,18 @@
 <template>
-  <section>
-    <BaseCard>
-      <h2>Register as a coach now!</h2>
-      <CoachForm @save-data="saveData" />
-      <div v-if="isSending">
-        <BaseSpinner />
-      </div>
-    </BaseCard>
-  </section>
-  <BaseDialog :show="!!error" title="An error occurred!" @close="resetError">
-    <p>{{ error }}</p>
-  </BaseDialog>
+  <div>
+    <section>
+      <BaseCard>
+        <h2>Register as a coach now!</h2>
+        <CoachForm @save-data="saveData" />
+        <div v-if="isSending">
+          <BaseSpinner />
+        </div>
+      </BaseCard>
+    </section>
+    <BaseDialog :show="!!error" title="An error occurred!" @close="resetError">
+      <p>{{ error }}</p>
+    </BaseDialog>
+  </div>
 </template>
 
 <script>

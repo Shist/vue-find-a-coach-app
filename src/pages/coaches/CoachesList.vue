@@ -1,35 +1,37 @@
 <template>
-  <CoachFilter @change-filter="setFilters" />
-  <section>
-    <BaseCard>
-      <div class="controls">
-        <BaseButton mode="outline" @click="loadCoaches(true)">
-          Refresh
-        </BaseButton>
-        <BaseButton v-if="!isCoach && !isLoading" link to="/register">
-          Register as Coach
-        </BaseButton>
-      </div>
-      <div v-if="isLoading">
-        <BaseSpinner />
-      </div>
-      <ul v-else-if="hasCoaches">
-        <CoachItem
-          v-for="coach in filteredCoaches"
-          :key="coach.id"
-          :id="coach.id"
-          :firstName="coach.firstName"
-          :lastName="coach.lastName"
-          :rate="coach.hourlyRate"
-          :areas="coach.areas"
-        ></CoachItem>
-      </ul>
-      <h3 v-else>No coaches found.</h3>
-    </BaseCard>
-  </section>
-  <BaseDialog :show="!!error" title="An error occurred!" @close="resetError">
-    <p>{{ error }}</p>
-  </BaseDialog>
+  <div>
+    <CoachFilter @change-filter="setFilters" />
+    <section>
+      <BaseCard>
+        <div class="controls">
+          <BaseButton mode="outline" @click="loadCoaches(true)">
+            Refresh
+          </BaseButton>
+          <BaseButton v-if="!isCoach && !isLoading" link to="/register">
+            Register as Coach
+          </BaseButton>
+        </div>
+        <div v-if="isLoading">
+          <BaseSpinner />
+        </div>
+        <ul v-else-if="hasCoaches">
+          <CoachItem
+            v-for="coach in filteredCoaches"
+            :key="coach.id"
+            :id="coach.id"
+            :firstName="coach.firstName"
+            :lastName="coach.lastName"
+            :rate="coach.hourlyRate"
+            :areas="coach.areas"
+          ></CoachItem>
+        </ul>
+        <h3 v-else>No coaches found.</h3>
+      </BaseCard>
+    </section>
+    <BaseDialog :show="!!error" title="An error occurred!" @close="resetError">
+      <p>{{ error }}</p>
+    </BaseDialog>
+  </div>
 </template>
 
 <script>
