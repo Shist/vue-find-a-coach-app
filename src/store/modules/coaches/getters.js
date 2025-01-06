@@ -3,6 +3,18 @@ export default {
     return state.coaches;
   },
 
+  shouldUpdate(state) {
+    const lastFetch = state.lastFetch;
+
+    if (!lastFetch) {
+      return true;
+    }
+
+    const currentTimeStamp = new Date().getTime();
+
+    return (currentTimeStamp - lastFetch) / 1000 > 60;
+  },
+
   hasCoaches(state) {
     return state.coaches && state.coaches.length > 0;
   },
