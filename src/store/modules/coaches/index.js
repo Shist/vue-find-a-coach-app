@@ -4,6 +4,7 @@ import actions from '@/store/modules/coaches/actions.js';
 
 export default {
   namespaced: true,
+
   state() {
     return {
       coaches: [
@@ -28,7 +29,10 @@ export default {
       ],
     };
   },
+
   getters: getters,
+
   mutations: mutations,
+
   actions: actions,
 };
