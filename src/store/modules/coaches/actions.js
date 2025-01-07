@@ -24,7 +24,7 @@ export default {
   },
 
   async registerCoach(context, data) {
-    const userId = context.rootGetters.userId;
+    const userId = context.rootGetters['auth/userId'];
     const coachData = {
       firstName: data.first,
       lastName: data.last,

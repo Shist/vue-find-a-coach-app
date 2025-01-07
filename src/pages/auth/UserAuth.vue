@@ -105,7 +105,14 @@ export default {
         return;
       }
 
-      // TODO: send http request...
+      if (this.mode === 'login') {
+        // TODO
+      } else {
+        this.$store.dispatch('auth/signup', {
+          email: this.email,
+          password: this.password,
+        });
+      }
     },
 
     switchAuthMode() {

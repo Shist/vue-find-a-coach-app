@@ -1,6 +1,6 @@
 export default {
   async fetchRequests(context) {
-    const coachId = context.rootGetters.userId;
+    const coachId = context.rootGetters['auth/userId'];
 
     const response = await fetch(
       `https://find-a-coach-dfbb6-default-rtdb.europe-west1.firebasedatabase.app/requests/${coachId}.json`
