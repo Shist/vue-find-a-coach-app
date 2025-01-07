@@ -1,6 +1,9 @@
 <template>
   <div>
-    <section>
+    <div v-if="isLoading">
+      <BaseSpinner />
+    </div>
+    <section v-else-if="!isCoach">
       <BaseCard>
         <h2>Register as a coach now!</h2>
         <CoachForm @save-data="saveData" />
@@ -25,12 +28,33 @@ export default {
 
   data() {
     return {
+      isLoading: false,
       isSending: false,
       error: null,
     };
   },
 
+  computed: {
+    isCoach() {
+      return this.$store.getters['coaches/isCoach'];
+    },
+  },
+
   methods: {
+    async loadCoaches() {
+      this.isLoading = true;
+
+      try {
+        await this.$store.dispatch('coaches/loadCoaches', {
+          forceRefresh: false,
+        });
+      } catch (error) {
+        this.error = error.message || 'Something went wrong!';
+      }
+
+      this.isLoading = false;
+    },
+
     async saveData(data) {
       this.isSending = true;
 
@@ -48,6 +72,16 @@ export default {
     resetError() {
       this.error = null;
     },
+  },
+
+  async mounted() {
+    if (!this.$store.getters['coaches/hasCoaches']) {
+      await this.loadCoaches();
+    }
+
+    if (this.isCoach) {
+      this.$router.replace('/coaches');
+    }
   },
 };
 </script>

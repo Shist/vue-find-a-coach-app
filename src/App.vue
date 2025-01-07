@@ -1,5 +1,5 @@
 <template>
-  <TheHeader></TheHeader>
+  <TheHeader />
   <router-view v-slot="slotProps">
     <transition name="route" mode="out-in">
       <component :is="slotProps.Component" />
@@ -13,6 +13,20 @@ import TheHeader from '@/components/layout/TheHeader.vue';
 export default {
   components: {
     TheHeader,
+  },
+
+  computed: {
+    didAutoLogout() {
+      return this.$store.getters['auth/didAutoLogout'];
+    },
+  },
+
+  watch: {
+    didAutoLogout(currValue, oldValue) {
+      if (currValue && currValue !== oldValue) {
+        this.$router.replace('/coaches');
+      }
+    },
   },
 
   created() {

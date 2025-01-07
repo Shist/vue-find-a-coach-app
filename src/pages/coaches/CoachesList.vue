@@ -26,7 +26,7 @@
             :lastName="coach.lastName"
             :rate="coach.hourlyRate"
             :areas="coach.areas"
-          ></CoachItem>
+          />
         </ul>
         <h3 v-else>No coaches found.</h3>
       </BaseCard>

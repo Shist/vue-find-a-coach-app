@@ -3,7 +3,7 @@
     <section>
       <BaseCard>
         <header>
-          <h2>Request Received</h2>
+          <h2>Requests Received</h2>
         </header>
         <div v-if="isLoading">
           <BaseSpinner />

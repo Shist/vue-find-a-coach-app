@@ -28,7 +28,7 @@
             :key="area"
             :type="area"
             :title="area"
-          ></BaseBadge>
+          />
           <p>{{ description }}</p>
         </BaseCard>
       </section>
@@ -103,7 +103,7 @@ export default {
     },
   },
 
-  async created() {
+  async mounted() {
     if (!this.$store.getters['coaches/hasCoaches']) {
       await this.loadCoaches();
     }
