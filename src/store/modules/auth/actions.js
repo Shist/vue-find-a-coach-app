@@ -1,11 +1,11 @@
 export default {
-  login() {},
-
-  async signup(context, payload) {
+  async authRequest(context, payload) {
     const API_KEY = import.meta.env.VITE_API_KEY;
 
+    const method = payload.isSignUp ? 'signUp' : 'signInWithPassword';
+
     const response = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
+      `https://identitytoolkit.googleapis.com/v1/accounts:${method}?key=${API_KEY}`,
       {
         method: 'POST',
         body: JSON.stringify({
@@ -24,7 +24,7 @@ export default {
       } else {
         throw new Error(
           responseData.message ||
-            'Failed to authenticate. Check your login data.'
+            'Failed to authenticate. Check your login data.',
         );
       }
     }
@@ -34,5 +34,17 @@ export default {
       userId: responseData.localId,
       tokenExpiration: responseData.expiresIn,
     });
+  },
+
+  async login(context, payload) {
+    payload.isSignUp = false;
+
+    await context.dispatch('authRequest', payload);
+  },
+
+  async signup(context, payload) {
+    payload.isSignUp = true;
+
+    await context.dispatch('authRequest', payload);
   },
 };

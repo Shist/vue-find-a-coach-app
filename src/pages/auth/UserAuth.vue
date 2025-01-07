@@ -108,8 +108,10 @@ export default {
     },
 
     async submitForm() {
-      this.validateEmail();
-      this.validatePassword();
+      if (this.mode === 'signup') {
+        this.validateEmail();
+        this.validatePassword();
+      }
 
       if (this.emailError || this.passwordError) {
         return;
@@ -117,14 +119,16 @@ export default {
 
       this.isLoading = true;
 
+      const userData = {
+        email: this.email,
+        password: this.password,
+      };
+
       try {
         if (this.mode === 'login') {
-          // TODO
+          await this.$store.dispatch('auth/login', userData);
         } else {
-          await this.$store.dispatch('auth/signup', {
-            email: this.email,
-            password: this.password,
-          });
+          await this.$store.dispatch('auth/signup', userData);
         }
       } catch (error) {
         this.error = error.message || 'Failed to authenticate, try later.';
