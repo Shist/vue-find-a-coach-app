@@ -42,6 +42,14 @@ export default {
     await context.dispatch('authRequest', payload);
   },
 
+  logout(context) {
+    context.commit('setUser', {
+      token: null,
+      userId: null,
+      tokenExpiration: null,
+    });
+  },
+
   async signup(context, payload) {
     payload.isSignUp = true;
 
