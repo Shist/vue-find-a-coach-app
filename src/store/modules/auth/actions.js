@@ -19,7 +19,14 @@ export default {
     const responseData = await response.json();
 
     if (!response.ok) {
-      throw new Error(responseData.message || 'Failed to authenticate.');
+      if (responseData?.error?.message === 'EMAIL_EXISTS') {
+        throw new Error('User with such email already exists.');
+      } else {
+        throw new Error(
+          responseData.message ||
+            'Failed to authenticate. Check your login data.'
+        );
+      }
     }
 
     context.commit('setUser', {

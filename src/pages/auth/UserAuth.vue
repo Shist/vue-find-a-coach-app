@@ -1,40 +1,48 @@
 <template>
-  <BaseCard>
-    <form @submit.prevent="submitForm">
-      <div class="form-control">
-        <label for="email">E-Mail</label>
-        <input type="email" id="email" v-model.trim="email" />
-      </div>
-      <p v-if="emailError" class="errors">
-        {{ emailError }}
-      </p>
-      <div class="form-control">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          autocomplete="on"
-          v-model.trim="password"
-        />
-      </div>
-      <div v-if="mode === 'signup'" class="form-control">
-        <label for="repeatPassword">Repeat Password</label>
-        <input
-          type="password"
-          id="repeatPassword"
-          autocomplete="on"
-          v-model.trim="repeatPassword"
-        />
-      </div>
-      <p v-if="passwordError" class="errors">
-        {{ passwordError }}
-      </p>
-      <BaseButton>{{ submitBtnLabel }}</BaseButton>
-      <BaseButton type="button" mode="flat" @click="switchAuthMode">
-        {{ switchModeBtnLabel }}
-      </BaseButton>
-    </form>
-  </BaseCard>
+  <div>
+    <BaseCard>
+      <form @submit.prevent="submitForm">
+        <div class="form-control">
+          <label for="email">E-Mail</label>
+          <input type="email" id="email" v-model.trim="email" />
+        </div>
+        <p v-if="emailError" class="errors">
+          {{ emailError }}
+        </p>
+        <div class="form-control">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            autocomplete="on"
+            v-model.trim="password"
+          />
+        </div>
+        <div v-if="mode === 'signup'" class="form-control">
+          <label for="repeatPassword">Repeat Password</label>
+          <input
+            type="password"
+            id="repeatPassword"
+            autocomplete="on"
+            v-model.trim="repeatPassword"
+          />
+        </div>
+        <p v-if="passwordError" class="errors">
+          {{ passwordError }}
+        </p>
+        <BaseButton>{{ submitBtnLabel }}</BaseButton>
+        <BaseButton type="button" mode="flat" @click="switchAuthMode">
+          {{ switchModeBtnLabel }}
+        </BaseButton>
+      </form>
+    </BaseCard>
+    <BaseDialog :show="isLoading" title="Authenticating..." fixed>
+      <BaseSpinner />
+    </BaseDialog>
+    <BaseDialog :show="!!error" title="An error occurred" @close="resetError">
+      <p>{{ error }}</p>
+    </BaseDialog>
+  </div>
 </template>
 
 <script>
@@ -47,6 +55,8 @@ export default {
       emailError: null,
       passwordError: null,
       mode: 'login',
+      isLoading: false,
+      error: null,
     };
   },
 
@@ -97,7 +107,7 @@ export default {
       }
     },
 
-    submitForm() {
+    async submitForm() {
       this.validateEmail();
       this.validatePassword();
 
@@ -105,14 +115,22 @@ export default {
         return;
       }
 
-      if (this.mode === 'login') {
-        // TODO
-      } else {
-        this.$store.dispatch('auth/signup', {
-          email: this.email,
-          password: this.password,
-        });
+      this.isLoading = true;
+
+      try {
+        if (this.mode === 'login') {
+          // TODO
+        } else {
+          await this.$store.dispatch('auth/signup', {
+            email: this.email,
+            password: this.password,
+          });
+        }
+      } catch (error) {
+        this.error = error.message || 'Failed to authenticate, try later.';
       }
+
+      this.isLoading = false;
     },
 
     switchAuthMode() {
@@ -127,6 +145,10 @@ export default {
       this.repeatPassword = '';
       this.emailError = null;
       this.passwordError = null;
+    },
+
+    resetError() {
+      this.error = null;
     },
   },
 };
