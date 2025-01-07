@@ -14,10 +14,12 @@ export default {
       throw new Error(responseData.message || 'Failed to fetch!');
     }
 
-    const coaches = Object.entries(responseData).map(([coachId, coachObj]) => ({
-      id: coachId,
-      ...coachObj,
-    }));
+    const coaches = Object.entries(responseData ?? {}).map(
+      ([coachId, coachObj]) => ({
+        id: coachId,
+        ...coachObj,
+      })
+    );
 
     context.commit('setCoaches', coaches);
     context.commit('setFetchTimeStamp');
@@ -25,6 +27,7 @@ export default {
 
   async registerCoach(context, data) {
     const userId = context.rootGetters['auth/userId'];
+    const token = context.rootGetters['auth/token'];
     const coachData = {
       firstName: data.first,
       lastName: data.last,
@@ -34,7 +37,7 @@ export default {
     };
 
     const response = await fetch(
-      `https://find-a-coach-dfbb6-default-rtdb.europe-west1.firebasedatabase.app/coaches/${userId}.json`,
+      `https://find-a-coach-dfbb6-default-rtdb.europe-west1.firebasedatabase.app/coaches/${userId}.json?auth=${token}`,
       {
         method: 'PUT',
         body: JSON.stringify(coachData),
