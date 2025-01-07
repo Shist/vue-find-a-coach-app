@@ -1,8 +1,7 @@
 export default {
   async authRequest(context, payload) {
+    const method = payload.mode;
     const API_KEY = import.meta.env.VITE_API_KEY;
-
-    const method = payload.isSignUp ? 'signUp' : 'signInWithPassword';
 
     const response = await fetch(
       `https://identitytoolkit.googleapis.com/v1/accounts:${method}?key=${API_KEY}`,
@@ -29,6 +28,9 @@ export default {
       }
     }
 
+    localStorage.setItem('token', responseData.idToken);
+    localStorage.setItem('userId', responseData.localId);
+
     context.commit('setUser', {
       token: responseData.idToken,
       userId: responseData.localId,
@@ -37,9 +39,23 @@ export default {
   },
 
   async login(context, payload) {
-    payload.isSignUp = false;
+    await context.dispatch('authRequest', {
+      ...payload,
+      mode: 'signInWithPassword',
+    });
+  },
 
-    await context.dispatch('authRequest', payload);
+  tryAutoLogin(context) {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+
+    if (token && userId) {
+      context.commit('setUser', {
+        token,
+        userId,
+        tokenExpiration: null,
+      });
+    }
   },
 
   logout(context) {
@@ -51,8 +67,9 @@ export default {
   },
 
   async signup(context, payload) {
-    payload.isSignUp = true;
-
-    await context.dispatch('authRequest', payload);
+    await context.dispatch('authRequest', {
+      ...payload,
+      mode: 'signUp',
+    });
   },
 };
