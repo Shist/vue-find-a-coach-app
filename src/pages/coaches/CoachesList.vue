@@ -7,7 +7,9 @@
           <BaseButton mode="outline" @click="loadCoaches(true)">
             Refresh
           </BaseButton>
-          <BaseButton v-if="!isLoggedIn" link to="/auth">Login</BaseButton>
+          <BaseButton v-if="!isLoggedIn" link to="/auth?redirect=register">
+            Login to Register as Coach
+          </BaseButton>
           <BaseButton v-if="isRegisterBtnVisible" link to="/register">
             Register as Coach
           </BaseButton>
