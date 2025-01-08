@@ -1,16 +1,23 @@
-import { createApp } from 'vue';
+import { createApp, defineAsyncComponent } from 'vue';
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
-import appComponents from '@/components/ui';
+import syncAppComponents from '@/components/ui';
+
+const BaseDialog = defineAsyncComponent(() =>
+  import('@/components/ui/BaseDialog.vue')
+);
 
 const app = createApp(App);
 
 app.use(router);
 app.use(store);
 
-Object.keys(appComponents).forEach((name) => {
-  app.component(name, appComponents[name]);
+// Sync components
+Object.keys(syncAppComponents).forEach((name) => {
+  app.component(name, syncAppComponents[name]);
 });
+// Async components
+app.component('BaseDialog', BaseDialog);
 
 app.mount('#app');
